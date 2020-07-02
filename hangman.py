@@ -13,7 +13,7 @@ WHITE = (255, 255, 255)
 #load images
 images = []
 for i in range(7):
-    images.append(pygame.image.load("hangman" + str(i) + ".png"))
+    images.append(pygame.image.load("images/hangman" + str(i) + ".png"))
 
 #game variables 
 hangman_status = 0 
