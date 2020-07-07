@@ -184,6 +184,7 @@ class HangmanGame:
 
             if self.hangman_status == 6:
                 self.display_message("Sorry, you lost :( ", color=RED)
+                self.display_message(f'The word was {self.word}', color=BLACK)
                 break
 
 
