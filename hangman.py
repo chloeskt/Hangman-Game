@@ -69,7 +69,10 @@ class Main_Menu():
         self.win = win
         self.start_btn = pygame.image.load('images/button_play.png')
         self.logo = pygame.image.load('images/logo.png') 
-        self.btn = (self.width/2 - self.start_btn.get_width()/2, 350, self.start_btn.get_width(), self.start_btn.get_height())
+        #self.logo = pygame.transform.scale(self.logo, (self.width, self.height))
+        self.btn = (625, 300, self.start_btn.get_width(), self.start_btn.get_height())
+        #self.btn = (self.width/100 - self.start_btn.get_width()/100, 200, self.start_btn.get_width(), self.start_btn.get_height())
+
 
     def run(self):
         run = True 
@@ -80,7 +83,7 @@ class Main_Menu():
                     run = False
                 
                 if event.type == pygame.MOUSEBUTTONUP:
-                    x, y = pygame.house.get_pos()
+                    x, y = pygame.mouse.get_pos()
 
                     if self.btn[0] <= x <= self.btn[0] + self.btn[2]:
                         if self.btn[1] <= y <= self.btn[1] + self.btn[3]:
@@ -92,9 +95,13 @@ class Main_Menu():
         pygame.quit()
 
     def draw(self):
-        self.win.blit(self.bg, (0,0))
-        self.win.blit(self.logo, (self.width/2 - self.logo.get_width()/2, 0))
-        self.win.blit(self.start_btn, (self.btn[0], self.btn[1]))
+        self.win.fill(WHITE)
+        self.win.blit(self.logo, (180,75))
+        #self.win.blit(self.logo, (self.width/50 - self.logo.get_width()/50, 0))
+        #self.win.blit(self.start_btn, (self.btn[0], self.btn[1]))
+        self.win.blit(self.start_btn, (625, 300))
+        text = TITLE_FONT.render("Hangman game", 1, BLACK)
+        self.win.blit(text, (self.width/2 - text.get_width()/2, 20))
         pygame.display.update()
 
 class HangmanGame():
@@ -106,6 +113,12 @@ class HangmanGame():
         self.hangman_status = 0
         self.RADIUS = 20
         self.GAP = 15
+        self.word = None
+        self.guessed = []
+        #load images
+        self.images = []
+        for i in range(7):
+            self.images.append(pygame.image.load("images/hangman" + str(i) + ".png"))
 
     def draw(self):
         """
@@ -117,8 +130,8 @@ class HangmanGame():
 
         # draw word
         display_word = ""
-        for letter in word.upper():
-            if letter in guessed:
+        for letter in self.word.upper():
+            if letter in self.guessed:
                 display_word += letter + " "
             else:
                 display_word += "_ "
@@ -153,17 +166,19 @@ class HangmanGame():
             if len(word) > 4 and len(word) < 8:
                 length = False
         #guessed = []
-        return word
+        return word 
             
     def main(self):
 
         FPS = 60
         clock = pygame.time.Clock()
         run = True
+        self.word = self.pick_word()
+        print('WORD', self.word)
 
         while run:
-            guessed = []
-            word = pick_word()
+            #self.guessed = []
+            #self.word = self.pick_word()
             clock.tick(FPS)
 
             for event in pygame.event.get():
@@ -178,36 +193,30 @@ class HangmanGame():
                             dis = math.sqrt((x - m_x)**2 + (y - m_y)**2)
                             if dis < self.RADIUS:
                                 letter[3] = False
-                                guessed.append(ltr)
-                                if ltr not in word:
+                                self.guessed.append(ltr)
+                                if ltr not in self.word:
                                     self.hangman_status += 1
             
-            draw()
+            self.draw()
 
             won = True
-            for letter in word:
-                if letter not in guessed:
+            for letter in self.word:
+                if letter not in self.guessed:
                     won = False
                     break
             
             if won:
-                display_message("You're a winner !!", color=GREEN)
+                self.display_message("You're a winner !!", color=GREEN)
                 break
 
             if self.hangman_status == 6:
-                display_message("Sorry, you lost :( ", color=RED)
+                self.display_message("Sorry, you lost :( ", color=RED)
                 break
-    
-#while True:
-#    main()
-    #TODO: make a menu for the user, to know if he.she wants to play again or quit, and choose language?
-    #need to make changes to some var: hangman_status, guessed, word, --> write a function for game variables 
-    #last: make a class
-#pygame.quit()
+
 
 if __name__ == "__main__":
     pygame.init()
     win = pygame.display.set_mode((WIDTH, HEIGHT))
     #from main_menu.main_menu import Main_Menu
     mainMenu = Main_Menu(win)
-    Main_Menu.run()
+    mainMenu.run()
