@@ -27,7 +27,7 @@ LETTER_FONT = pygame.font.SysFont("arial", 40)
 WORD_FONT = pygame.font.SysFont("arial", 60)
 TITLE_FONT = pygame.font.SysFont('arial', 70)
 
-class Main_Menu():
+class MainMenu:
     
     def __init__(self, win):
         self.width = 800
@@ -74,12 +74,12 @@ class Main_Menu():
         self.win.blit(text, (self.width/2 - text.get_width()/2, 20))
         pygame.display.update()
 
-class HangmanGame():
+class HangmanGame:
 
     def __init__(self, win):
         self.WIDTH = 800
         self.HEIGHT = 500
-        self.win = win 
+        self.win = win
         self.hangman_status = 0
         self.RADIUS = 20
         self.GAP = 15
@@ -89,7 +89,7 @@ class HangmanGame():
         for i in range(7):
             self.images.append(pygame.image.load("images/hangman" + str(i) + ".png"))
         self.letters = [] 
-        self.start_x = round((WIDTH - (GAP + RADIUS*2)*13)/2)
+        self.start_x = round((self.WIDTH - (self.GAP + self.RADIUS*2)*13)/2)
         self.start_y = 400
         for i in range(26):
             x = self.start_x + self.GAP*2 + ((self.RADIUS*2 + self.GAP) * (i % 13))
@@ -190,5 +190,4 @@ class HangmanGame():
 if __name__ == "__main__":
     pygame.init()
     win = pygame.display.set_mode((WIDTH, HEIGHT))
-    mainMenu = Main_Menu(win)
-    mainMenu.run()
+    MainMenu(win).run()
